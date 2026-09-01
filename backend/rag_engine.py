@@ -29,12 +29,13 @@ class RAGEngine:
         custom_system_prompt: str = None,
     ) -> QueryResponse:
         start_total = time.time()
+        has_api_key = bool(api_key and api_key.strip())
 
         # Step 1: Check for casual greetings / chitchat
         casual_greetings = {
-            "hi": "Hello! 👋 How can I help you today with your knowledge documents?",
-            "hello": "Hello! 👋 Ask me anything about your uploaded documents or request a summary.",
-            "hey": "Hey there! 👋 Upload any PDF, Word, or text files and ask me questions about them.",
+            "hi": "Hello! How can I help you today with your knowledge documents?",
+            "hello": "Hello! Ask me anything about your uploaded documents or request a summary.",
+            "hey": "Hey there! Upload any PDF, Word, or text files and ask me questions about them.",
             "how are you": "I'm doing great! Ready to help analyze your knowledge documents.",
             "who are you": "I am NexusRAG, your intelligent RAG Knowledge Assistant. I parse documents, search vector embeddings, and answer queries with exact source citations.",
             "what can you do": "I can ingest PDF, DOCX, and TXT files, perform hybrid vector search, summarize documents, and answer questions with exact page numbers.",
