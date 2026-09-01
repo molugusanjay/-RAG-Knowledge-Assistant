@@ -30,7 +30,32 @@ class RAGEngine:
     ) -> QueryResponse:
         start_total = time.time()
 
-        # Step 1: Retrieval
+        # Step 1: Check for casual greetings / chitchat
+        casual_greetings = {
+            "hi": "Hello! 👋 How can I help you today with your knowledge documents?",
+            "hello": "Hello! 👋 Ask me anything about your uploaded documents or request a summary.",
+            "hey": "Hey there! 👋 Upload any PDF, Word, or text files and ask me questions about them.",
+            "how are you": "I'm doing great! Ready to help analyze your knowledge documents.",
+            "who are you": "I am NexusRAG, your intelligent RAG Knowledge Assistant. I parse documents, search vector embeddings, and answer queries with exact source citations.",
+            "what can you do": "I can ingest PDF, DOCX, and TXT files, perform hybrid vector search, summarize documents, and answer questions with exact page numbers.",
+            "thanks": "You're very welcome! Let me know if you have more document questions.",
+            "thank you": "Happy to help! Feel free to ask more questions about your files.",
+        }
+
+        clean_q = user_query.strip().lower().rstrip("!?.")
+        if clean_q in casual_greetings:
+            return QueryResponse(
+                query=user_query,
+                answer=casual_greetings[clean_q],
+                sources=[],
+                retrieval_time_ms=0.0,
+                generation_time_ms=0.1,
+                total_time_ms=round((time.time() - start_total) * 1000, 2),
+                model_used="NexusRAG Conversational Agent",
+                has_api_key=has_api_key,
+            )
+
+        # Step 2: Retrieval
         t_retrieval_start = time.time()
         matching_chunks = self.vector_store.search(
             query=user_query, top_k=top_k, similarity_threshold=similarity_threshold
