@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary user uploads and vector index persistence
+uploaded_documents/
+vector_data/
+
+# Environments
+.venv/
+env/
+venv/
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

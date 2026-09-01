@@ -1,0 +1,13 @@
+Nexus Technology Solutions - Employee Operations Handbook
+
+Section 1: Working Hours & Remote Work
+- Core Working Hours: All team members operate between 9:00 AM and 5:00 PM local time. Flexible arrival between 8:00 AM and 10:00 AM is permitted.
+- Hybrid Work Policy: Full-time employees are eligible for up to 3 days per week of remote work. Remote days must be coordinated with team leads in advance.
+
+Section 2: Security & Confidentiality
+- Device Encryption: All company-issued laptops must have Full Disk Encryption (BitLocker / FileVault) enabled at all times.
+- API Key & Secret Management: Credentials, production database passwords, and API keys must never be committed to public Git repositories or shared via unencrypted channels.
+
+Section 3: Professional Development & Travel Expenses
+- Learning Stipend: Each employee receives an annual $1,500 stipend for technical certifications, textbooks, and conference attendance.
+- Daily Expense Limits: Business travel meal expenses are reimbursed up to $75 per day. Itemized receipts must be submitted via the internal portal within 14 days of travel.

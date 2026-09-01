@@ -1,0 +1,29 @@
+================================================================================
+          NEXUS AI - RAG KNOWLEDGE ASSISTANT SYSTEM MANUAL (v2025.1)
+================================================================================
+
+1. PROJECT OBJECTIVE & OVERVIEW
+Nexus AI Knowledge Assistant is an enterprise-grade Retrieval-Augmented Generation (RAG) platform built for full-stack document intelligence.
+The system ingests multi-format documents (PDF, DOCX, TXT, MD), splits unstructured text into overlapping 500-character chunks with 100-character semantic overlaps, generates sparse TF-IDF and dense vector embeddings, and stores vectors in an in-memory index for real-time similarity search.
+
+2. SYSTEM ARCHITECTURE & COMPONENTS
+- Frontend UI: Single-Page Application built with HTML5, CSS3 Glassmorphism theme, and Vanilla JavaScript.
+- API Backend: Python 3.14 + FastAPI + Uvicorn server running on http://127.0.0.1:8000.
+- Vector Index: Hybrid retrieval combining Cosine Similarity with BM25 keyword boosting.
+- Generative AI Engine: Google Gemini 3.6 Flash integration with automatic fallback to an offline extractive QA engine.
+
+3. SECURITY & COMPLIANCE RULES
+- Rule 1: API keys (such as Google Gemini API keys) must be stored strictly in browser local storage and never logged in backend server traces.
+- Rule 2: All uploaded files must be sanitized and checked against the 20MB file size limit.
+- Rule 3: File formats permitted for ingestion include .pdf, .docx, .doc, .txt, .md, .csv, and .json.
+
+4. TEAM RESPONSIBILITIES & OPERATIONAL POLICIES
+- Lead Architect (Sanjay Molugu): Responsible for overall RAG engine architecture, vector similarity optimization, and system integration.
+- Daily Working Hours: Core working hours are 9:00 AM to 5:00 PM EST, Monday through Friday.
+- Annual Stipend: Every team member receives an annual $1,500 learning stipend for technical certifications and AI conferences.
+- Travel Reimbursement: Daily meal expenses during business travel are capped at $75 per day and must be submitted within 14 days with receipts.
+
+5. KEY PERFORMANCE INDICATORS (KPIs)
+- Vector Search Latency: Sub-10ms retrieval for up to 100,000 document chunks.
+- Summary Accuracy: 98%+ ground-truth contextual match with zero hallucinated facts.
+================================================================================

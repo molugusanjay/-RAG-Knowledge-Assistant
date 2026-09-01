@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusRAG - Intelligent Knowledge Assistant</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="dark-theme">
+
+  <div class="app-container">
+    
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div class="brand-text">
+          <h1>NexusRAG <span class="badge-pro">Internship Edition</span></h1>
+          <p>Retrieval-Augmented Generation Knowledge System</p>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="status-pill" id="system-status-pill">
+          <span class="pulse-dot green"></span>
+          <span id="status-text">System Active</span>
+        </div>
+        <div class="status-pill" id="vector-count-pill">
+          <i class="fa-solid fa-cubes"></i>
+          <span id="doc-chunk-count">0 Chunks</span>
+        </div>
+        <button class="api-key-badge" id="api-key-btn" onclick="switchTab('settings')">
+          <i class="fa-solid fa-key"></i>
+          <span id="api-key-status-label">Configure Gemini API</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main App Layout (Sidebar + Content Workspace) -->
+    <div class="workspace">
+
+      <!-- Left Sidebar: Document Vault & Knowledge Base -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2><i class="fa-solid fa-box-archive"></i> Document Vault</h2>
+          <span class="doc-count-tag" id="doc-count-badge">0 Files</span>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div class="dropzone" id="dropzone" onclick="triggerFileInput()">
+          <input type="file" id="file-input" multiple accept=".pdf,.docx,.txt,.md" style="display:none" onchange="handleFileSelect(event)" onclick="event.stopPropagation()" />
+          <div class="dropzone-icon">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <p class="dropzone-title">Upload Knowledge Files</p>
+          <p class="dropzone-subtitle">Drag & Drop or <span onclick="event.stopPropagation(); triggerFileInput();">Browse</span></p>
+          <p class="dropzone-formats">PDF, DOCX, TXT, MD (Max 20MB)</p>
+        </div>
+
+        <!-- Document List -->
+        <div class="document-section">
+          <div class="section-title-bar">
+            <h3>Indexed Documents</h3>
+            <button class="icon-btn-text" onclick="clearKnowledgeBase()" title="Reset Knowledge Base">
+              <i class="fa-solid fa-trash-can"></i> Clear All
+            </button>
+          </div>
+
+          <div class="document-list" id="document-list">
+            <!-- Dynamically Populated -->
+            <div class="empty-docs-placeholder" id="empty-docs-msg">
+              <i class="fa-regular fa-folder-open"></i>
+              <p>No documents uploaded yet.</p>
+              <span>Upload PDF/TXT documents or load sample documents below to begin.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Documents Quick Loader -->
+        <div class="sample-docs-card">
+          <div class="sample-card-header">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Load Quick Demo Data</span>
+          </div>
+          <p>Don't have documents ready? Ingest pre-built sample files instantly:</p>
+          <button class="btn-secondary full-width" onclick="loadSampleDocs()">
+            <i class="fa-solid fa-file-import"></i> Load Demo Knowledge Base
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Workspace Tabs Area -->
+      <main class="main-content">
+        
+        <!-- Tab Navigation Bar -->
+        <nav class="tab-bar">
+          <button class="tab-btn active" data-tab="chat" onclick="switchTab('chat')">
+            <i class="fa-solid fa-comments"></i> RAG Chat Assistant
+          </button>
+          <button class="tab-btn" data-tab="explorer" onclick="switchTab('explorer')">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Vector DB Explorer
+          </button>
+          <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">
+            <i class="fa-solid fa-chart-line"></i> Performance & Metrics
+          </button>
+          <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">
+            <i class="fa-solid fa-sliders"></i> System Settings
+          </button>
+        </nav>
+
+        <!-- Tab 1: Interactive Chat UI -->
+        <section class="tab-view active" id="tab-chat">
+          <div class="chat-container">
+            
+            <!-- Chat Feed Messages -->
+            <div class="chat-feed" id="chat-feed">
+              <div class="chat-welcome-card">
+                <div class="welcome-icon">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <h2>Welcome to NexusRAG Knowledge Assistant</h2>
+                <p>Upload your PDF, Word, or Text documents to ask questions, extract insights, and explore source citations with exact similarity metrics.</p>
+
+                <div class="prompt-suggestions">
+                  <p class="suggestions-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Try asking:</p>
+                  <div class="suggestion-chips">
+                    <button class="chip" onclick="useSuggestedQuery(this)">Summarize the key points of the uploaded document.</button>
+                    <button class="chip" onclick="useSuggestedQuery(this)">What are the core technical guidelines discussed?</button>
+                    <button class="chip" onclick="useSuggestedQuery(this)">Extract main policies and operational procedures.</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Input Controls -->
+            <div class="chat-input-wrapper">
+              <form id="chat-form" onsubmit="submitQuery(event)">
+                <div class="chat-input-box">
+                  <textarea id="query-input" placeholder="Ask a question about your knowledge documents..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
+                  <button type="submit" class="send-btn" id="send-btn" title="Send Message">
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
+                </div>
+                <div class="chat-input-footer">
+                  <span class="hyper-indicator"><i class="fa-solid fa-bolt"></i> Retrieval Mode: <strong id="retrieval-mode-label">Hybrid (TF-IDF + Cosine + BM25)</strong></span>
+                  <span class="model-indicator"><i class="fa-solid fa-microchip"></i> Engine: <strong id="current-engine-label">Local Extractive (Offline Ready)</strong></span>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Tab 2: Vector DB Explorer -->
+        <section class="tab-view" id="tab-explorer">
+          <div class="explorer-container">
+            <div class="explorer-header-card">
+              <div class="header-info">
+                <h2><i class="fa-solid fa-database"></i> Vector Store & Chunk Explorer</h2>
+                <p>Inspect raw document chunks, test embedding similarity matches, and observe exact scoring algorithms.</p>
+              </div>
+              <div class="search-bar-inline">
+                <input type="text" id="explorer-search" placeholder="Search chunk content or query vector similarity..." onkeyup="filterChunks()" />
+                <button class="btn-primary" onclick="testVectorSearch()">
+                  <i class="fa-solid fa-magnifying-glass"></i> Test Vector Search
+                </button>
+              </div>
+            </div>
+
+            <div class="chunks-grid-container">
+              <div class="grid-stats-bar">
+                <span id="showing-chunks-count">Showing 0 Chunks</span>
+                <span class="badge-neutral" id="vector-dim-badge">10,000 Dimensions (TF-IDF)</span>
+              </div>
+              <div class="chunks-grid" id="chunks-grid">
+                <!-- Chunks rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 3: Performance & Analytics -->
+        <section class="tab-view" id="tab-analytics">
+          <div class="analytics-container">
+            <h2><i class="fa-solid fa-chart-pie"></i> System Analytics & Performance Metrics</h2>
+            
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Total Documents</span>
+                  <i class="fa-solid fa-file-contract"></i>
+                </div>
+                <div class="metric-value" id="metric-docs">0</div>
+                <div class="metric-sub">Active in storage</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Total Vector Chunks</span>
+                  <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div class="metric-value" id="metric-chunks">0</div>
+                <div class="metric-sub">Indexed passages</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Avg Retrieval Latency</span>
+                  <i class="fa-solid fa-stopwatch"></i>
+                </div>
+                <div class="metric-value" id="metric-retrieval-time">0 ms</div>
+                <div class="metric-sub">Vector search speed</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Avg Generation Latency</span>
+                  <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <div class="metric-value" id="metric-gen-time">0 ms</div>
+                <div class="metric-sub">RAG response synthesis</div>
+              </div>
+            </div>
+
+            <!-- Technical Architecture Card -->
+            <div class="arch-card">
+              <h3><i class="fa-solid fa-sitemap"></i> Internship Project System Architecture</h3>
+              <div class="arch-flow">
+                <div class="arch-node">
+                  <i class="fa-solid fa-file-upload"></i>
+                  <h4>1. Ingestion</h4>
+                  <p>PDF/DOCX/TXT text extraction & page parsing</p>
+                </div>
+                <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="arch-node">
+                  <i class="fa-solid fa-scissors"></i>
+                  <h4>2. Recursive Chunking</h4>
+                  <p>500 char windows + 100 char semantic overlap</p>
+                </div>
+                <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="arch-node">
+                  <i class="fa-solid fa-calculator"></i>
+                  <h4>3. Hybrid Indexing</h4>
+                  <p>TF-IDF + Cosine similarity + BM25 keyword boosting</p>
+                </div>
+                <div class="arch-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="arch-node">
+                  <i class="fa-solid fa-robot"></i>
+                  <h4>4. RAG Generation</h4>
+                  <p>Context injection + Gemini API / Extractive QA</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Tab 4: Settings & Configuration -->
+        <section class="tab-view" id="tab-settings">
+          <div class="settings-container">
+            <h2><i class="fa-solid fa-gears"></i> Hyperparameter & RAG Configuration</h2>
+            <p class="settings-desc">Customize text splitting, vector retrieval parameters, and generative model keys.</p>
+
+            <div class="settings-grid">
+              
+              <!-- Gemini API Key Card -->
+              <div class="settings-card highlight-card">
+                <div class="card-title">
+                  <i class="fa-solid fa-key"></i>
+                  <div>
+                    <h3>Google Gemini API Key</h3>
+                    <p>Provide your key to unlock full LLM generation via Gemini 2.5 Flash</p>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="setting-api-key">Gemini API Key</label>
+                  <div class="password-input">
+                    <input type="password" id="setting-api-key" placeholder="AIzaSy..." />
+                    <button class="toggle-pwd" onclick="togglePasswordVisibility('setting-api-key')">
+                      <i class="fa-solid fa-eye" id="setting-api-key-eye"></i>
+                    </button>
+                  </div>
+                  <small>Key is saved strictly in browser local storage and never exposed externally.</small>
+                </div>
+                <button class="btn-primary" onclick="saveApiKey()">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Key & Test Connection
+                </button>
+              </div>
+
+              <!-- Hyperparameters Card -->
+              <div class="settings-card">
+                <div class="card-title">
+                  <i class="fa-solid fa-sliders"></i>
+                  <div>
+                    <h3>Retrieval Hyperparameters</h3>
+                    <p>Fine-tune vector search depth and chunk sizes</p>
+                  </div>
+                </div>
+
+                <div class="range-group">
+                  <div class="range-label">
+                    <label for="setting-top-k">Top-K Retrieved Chunks</label>
+                    <span class="range-val" id="val-top-k">4</span>
+                  </div>
+                  <input type="range" id="setting-top-k" min="1" max="10" value="4" oninput="updateRangeLabel('val-top-k', this.value)" />
+                </div>
+
+                <div class="range-group">
+                  <div class="range-label">
+                    <label for="setting-chunk-size">Chunk Size (Characters)</label>
+                    <span class="range-val" id="val-chunk-size">500</span>
+                  </div>
+                  <input type="range" id="setting-chunk-size" min="200" max="2000" step="50" value="500" oninput="updateRangeLabel('val-chunk-size', this.value)" />
+                </div>
+
+                <div class="range-group">
+                  <div class="range-label">
+                    <label for="setting-chunk-overlap">Chunk Overlap (Characters)</label>
+                    <span class="range-val" id="val-chunk-overlap">100</span>
+                  </div>
+                  <input type="range" id="setting-chunk-overlap" min="0" max="500" step="25" value="100" oninput="updateRangeLabel('val-chunk-overlap', this.value)" />
+                </div>
+
+                <button class="btn-secondary" onclick="saveSettings()">
+                  <i class="fa-solid fa-check"></i> Apply Settings
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
