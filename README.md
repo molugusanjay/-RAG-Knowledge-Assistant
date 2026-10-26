@@ -1,19 +1,17 @@
-# 🚀 NexusRAG - RAG-Based Knowledge Assistant
+#  NexusRAG - RAG-Based Knowledge Assistant
 
 > **Internship Showcase Project**  
 > **Difficulty Level**: Medium / Advanced Full-Stack AI Application  
 > **Domain**: Artificial Intelligence / Natural Language Processing / Full-Stack Web Development  
 
----
-
-## 📌 Project Overview
+# Project Overview
 **NexusRAG** is a full-stack Retrieval-Augmented Generation (RAG) Knowledge Assistant that enables users to upload custom documents (PDF, DOCX, TXT, MD), convert unstructured text into high-dimensional vector embeddings, store them in a vector index with hybrid search, and ask questions through an interactive conversational web dashboard.
 
 The system combines **Hybrid Retrieval** (TF-IDF Cosine Similarity + BM25 Keyword Boosting) with **Google Gemini 2.5 Flash** for LLM generation, along with a zero-dependency **Local Extractive QA Engine** for offline usage without API keys.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 1. **Multi-Format Document Vault**:
    - Parses `.pdf`, `.docx`, `.txt`, and `.md` files.
@@ -41,7 +39,7 @@ The system combines **Hybrid Retrieval** (TF-IDF Cosine Similarity + BM25 Keywor
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Backend Framework**: Python 3.14 + FastAPI + Uvicorn
 - **Document Extractors**: `pypdf`, `python-docx`
@@ -52,7 +50,7 @@ The system combines **Hybrid Retrieval** (TF-IDF Cosine Similarity + BM25 Keywor
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 rag-knowledge-assistant/
@@ -78,11 +76,11 @@ rag-knowledge-assistant/
 
 ---
 
-## ⚡ Quick Start Guide
+##  Quick Start Guide
 
 ### Step 1: Clone / Navigate to Project Directory
 ```bash
-cd C:\Users\molug\.gemini\antigravity\scratch\rag-knowledge-assistant
+
 ```
 
 ### Step 2: Run the One-Click Launcher
@@ -98,7 +96,7 @@ python run.py
 
 ---
 
-## 📡 REST API Reference
+##  REST API Reference
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
@@ -113,7 +111,7 @@ python run.py
 
 ---
 
-## 🎓 Internship Presentation Guide
+##  Internship Presentation Guide
 
 When presenting this project to your internship evaluator:
 
