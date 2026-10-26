@@ -74,28 +74,6 @@ rag-knowledge-assistant/
 └── README.md                  # Comprehensive internship documentation
 ```
 
----
-
-##  Quick Start Guide
-
-### Step 1: Clone / Navigate to Project Directory
-```bash
-
-```
-
-### Step 2: Run the One-Click Launcher
-```bash
-python run.py
-```
-
-*The launcher script will automatically:*
-1. Verify Python dependencies and install missing packages from `requirements.txt`.
-2. Auto-ingest sample demo documents into the Vector Store.
-3. Start the FastAPI backend server at `http://127.0.0.1:8000`.
-4. Open your default web browser to `http://127.0.0.1:8000`.
-
----
-
 ##  REST API Reference
 
 | Endpoint | Method | Description |
